@@ -7,28 +7,36 @@
 
 <body>
 
-<h1 style="text-align:center; margin-bottom:50px;">Give me the money</h1>
+    <h1 style="text-align:center; margin-bottom:50px;">Give me the money</h1>
     <div style="display:flex; align-items:center; justify-content:center;">
         <div style="margin:0 50px;">
             <input id="klarnaRadio" type="radio" name="payment" />
             <img src="https://x.klarnacdn.net/payment-method/assets/badges/generic/klarna.svg" style="margin:0 10px;width: 200px;">
         </div>
 
-        <div style="display:flex;">
+        <div id="DirectPaymentDiv" style="display:flex;">
             <input id="DirectRadio" type="radio" name="payment" />
             <div style="background-color:red;width:200px;height:100px;margin:0 10px;">Direct Payment</div>
         </div>
     </div>
 
+    <div id="finishPayment" style="display:none;text-align:center; background-color:#cfcbca;">
+        <h2>Shipping address</h2>
+        <div>Daniel Infante</div>
+        <div>geral@netsigma.pt</div>
+        <h2>Payment Method</h2>
+        <div>Klarna Payment</div>
+    </div>
+
     <!--Klarna container-->
-    <div id="klarna_container" style="width: 500px; margin: auto;"></div>
+    @* <div id="klarna_container" style="width: 500px; margin: auto;"></div> *@
     <div style="width: 500px; margin: 20px auto ;">
         <!--Button to trigger authorize call-->
         <button id="klarnaRequest" style="width: 500px; height: 50px; margin: auto;">Continue (Create session)</button>
-        <button id="KlarnaButton" class="authorize" style="display:none; width: 500px; height: 50px; margin: auto;">Your Buy Button</button>
+        <button id="KlarnaButton" class="authorize" style="display:none; width: 500px; height: 50px; margin: auto;">Confirm</button>
         <button id="placeOrderButton" style="display:none; width: 500px; height: 50px; margin: auto;">Place an order</button>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://x.klarnacdn.net/kp/lib/v1/api.js" async></script>
     <script type="text/javascript">
@@ -38,6 +46,7 @@
     </script>
 
     <script src="~/js/site.js"></script>
+
 </body>
 
 </html>

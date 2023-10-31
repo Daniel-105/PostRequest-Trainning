@@ -101,6 +101,7 @@ namespace PostRequest_Trainning.Controllers
                 return Json(new { error = "An error occurred: " + ex.Message });
             }
         }
+
         //[IgnoreAntiforgeryToken]
         [HttpPost]
         public async Task<JsonResult> PlaceOrder(string authorizationToken)
@@ -162,6 +163,7 @@ namespace PostRequest_Trainning.Controllers
                     // Read the response body as a string
                     string responseContent = await response.Content.ReadAsStringAsync();
                     JObject json = JObject.Parse(responseContent);
+
                     var typeJson = json.GetType();
                     //var jsonResponse = JsonSerializer.Deserialize<JsonObject>(responseContent);
 

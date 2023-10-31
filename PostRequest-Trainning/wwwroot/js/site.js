@@ -1,35 +1,42 @@
 ﻿let klarnaRequest = document.querySelector("#klarnaRequest");
 let klarnaButton = document.querySelector("#KlarnaButton");
 let placeOrderButton = document.querySelector("#placeOrderButton");
+let klarnaRadio = document.querySelector("#klarnaRadio");
+let DirectRadio = document.querySelector("#DirectRadio");
+let DirectPaymentDiv = document.querySelector("#DirectPaymentDiv");
+let finishPayment = document.querySelector("#finishPayment");
 let authorizationToken = "";
-//let dataResponse = "";
-//let jsonData = "";
-//let client_token = "";
-//let identifier = "";
 
 klarnaRequest.addEventListener("click", () => {
-    console.log("Clicked");
+    if (klarnaRadio.checked) {
+        DirectPaymentDiv.style.display = "none";
+        console.log("Clicked");
 
-    $.ajax({
-        type: "POST",
-        url: URL1,
-        //contentType: "application/json; charset=utf-8",
-        //data: Data,
-        //dataType: 'json',
-        success: function (data) {
-            dataResponse = data;
-            let jsonData = JSON.parse(dataResponse);
-            let client_token = jsonData.client_token;
-            let identifier = jsonData.payment_method_categories[0].identifier;
-            console.log(client_token);
-            console.log(identifier);
-            klarnaButton.style.display = "block";
-            createSession(client_token, identifier);
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.error("An error occurred:", errorThrown);
-        }
-    });
+        $.ajax({
+            type: "POST",
+            url: URL1,
+            //contentType: "application/json; charset=utf-8",
+            //data: Data,
+            //dataType: 'json',
+            success: function (data) {
+                dataResponse = data;
+                let jsonData = JSON.parse(dataResponse);
+                let client_token = jsonData.client_token;
+                let identifier = jsonData.payment_method_categories[0].identifier;
+                console.log(client_token);
+                console.log(identifier);
+                klarnaRequest.style.display = "none";
+                klarnaButton.style.display = "block";
+                finishPayment.style.display = "block";
+                createSession(client_token, identifier);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("An error occurred:", errorThrown);
+            }
+        });
+    } else if (!klarnaRadio.checked && !DirectRadio.checked) {
+        alert("Please select a payment method");
+    }
 });
 
 function createSession(client_token, identifier) {
@@ -96,11 +103,13 @@ klarnaButton.addEventListener("click", () => {
             console.log(authorizationToken);
             //let authorizationToken = res["authorization_token"];
             //console.log(`${authorizationToken} is of type ${typeof authorizationToken}`)
-            placeOrderButton.style.display = "block";
+            //placeOrderButton.style.display = "block";
+            confirm();
+            
         })
 });
 
-placeOrderButton.addEventListener("click", () => {
+function confirm() {
     console.log(authorizationToken);
     let data = { "authorizationToken": authorizationToken }
     $.ajax({
@@ -114,9 +123,23 @@ placeOrderButton.addEventListener("click", () => {
 
             console.log(typeof parsedReponse);
             console.log(parsedReponse.fraud_status);
+            if (parsedReponse.fraud_status == "ACCEPTED") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Your payment has been correctly processed',
+                    showConfirmButton: false,
+                })
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                })
+            }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error("An error occurred:", errorThrown);
         }
     });
-});
+
+}
